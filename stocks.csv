@@ -3,37 +3,25 @@ StockName,Symbol
 TCS,TCS.NS
 Infosys,INFY.NS
 Reliance,RELIANCE.NS
-# Banking Sector
    HDFC Bank,HDFCBANK.NS
     ICICI Bank,ICICIBANK.NS
     SBI,SBIN.NS
     Axis Bank,AXISBANK.NS
     Kotak Bank,KOTAKBANK.NS
-    # FMCG Sector
     HUL,HINDUNILVR.NS
     ITC,ITC.NS
     Nestle India,NESTLEIND.NS
     Britannia,BRITANNIA.NS
-
-    # Auto Sector
     Maruti Suzuki,MARUTI.NS
     Tata Motors,TATAMOTORS.NS
     Mahindra & Mahindra,M&M.NS
-
-    # Infra / Energy
     Reliance,RELIANCE.NS
     Larsen & Toubro,LT.NS
     NTPC,NTPC.NS
     Power Grid,POWERGRID.NS
-
-    # Finance / NBFC
     Bajaj Finance,BAJFINANCE.NS
     Bajaj Finserv,BAJAJFINSV.NS
-
-    # Telecom
     Bharti Airtel,BHARTIARTL.NS
-
-    # Pharma
     Sun Pharma,SUNPHARMA.NS
     Dr Reddy,DRREDDY.NS
     Cipla,CIPLA.NS
