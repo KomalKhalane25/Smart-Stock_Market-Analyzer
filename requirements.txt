@@ -1,0 +1,12 @@
+streamlit
+yfinance
+pandas
+numpy
+plotly
+scikit-learn
+tensorflow
+ta
+python-dotenv
+google-generativeai
+matplotlib
+feedparser
