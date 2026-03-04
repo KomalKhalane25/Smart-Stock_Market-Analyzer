@@ -1,9 +1,3 @@
-# ==========================================
-# 📊 MARKET.AI - Smart Investor Version
-# MSc Computer Science Major Project
-# Developed by Komal Khalane
-# ==========================================
-
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -18,69 +12,138 @@ import feedparser
 from textblob import TextBlob
 from openai import OpenAI
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
+from PIL import Image
+import base64
+from io import BytesIO
 
 # ==========================================
 # PAGE SETUP
 # ==========================================
-st.set_page_config(page_title="STOCK_MARKET.AI", layout="wide")
-st.title("📊 STOCK_MARKET Intelligent Investment System")
+st.set_page_config(
+    page_title="SMART_MARKET_AI",
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
+# Apply gradient background and custom text styles
+st.markdown(
+    """
+    <style>
+    /* Page background gradient */
+    .stApp {
+        
+        color: white;
+        font-family: 'Arial', sans-serif;
+    }
 
+    /* Header text styling */
+    .stMarkdown h1 {
+        font-size: 60px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 5px;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    }
 
+    .stMarkdown h4 {
+        font-size: 22px;
+        text-align: center;
+        color: #cddc39;
+        text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+        margin-top: 0;
+    }
 
+    /* Buttons styling */
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 10px;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
 
-# ==========================================
-# LSTM FUNCTION (AI MODEL)
-# ==========================================
-def lstm_predict(data):
+   
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-    close_data = data['Close'].values.reshape(-1,1)
+# Header Text
+st.markdown(
+    """
+    <h1>📊 SMART_MARKET_AI</h1>
+    <h4>Intelligent Stock Market Prediction & Investment Insights</h4>
+    """,
+    unsafe_allow_html=True
+)
 
-    # Scale Data (AI needs normalized values)
-    scaler = MinMaxScaler(feature_range=(0,1))
-    scaled_data = scaler.fit_transform(close_data)
+st.divider()
 
-    X = []
-    y = []
-
-    # Use last 60 days to predict next day
-    for i in range(60, len(scaled_data)):
-        X.append(scaled_data[i-60:i, 0])
-        y.append(scaled_data[i, 0])
-
-    X, y = np.array(X), np.array(y)
-
-    X = np.reshape(X, (X.shape[0], X.shape[1], 1))
-
-    # Build LSTM Model
-    model = Sequential()
-    model.add(LSTM(50, return_sequences=True, input_shape=(X.shape[1],1)))
-    model.add(LSTM(50))
-    model.add(Dense(1))
-
-    model.compile(optimizer='adam', loss='mean_squared_error')
-
-    # Train Model (fast training)
-    model.fit(X, y, epochs=3, batch_size=32, verbose=0)
-
-    # Predict Next Price
-    last_60 = scaled_data[-60:]
-    last_60 = np.reshape(last_60, (1,60,1))
-
-    predicted = model.predict(last_60)
-    predicted_price = scaler.inverse_transform(predicted)
-
-    return float(predicted_price[0][0])
 # ================================
 # SIDEBAR MENU
-# ================================
-st.sidebar.title("📊 STOCK_MARKET.AI")
+# ==========================================
+# Initialize default section in session_state
+# ==========================================
+if "section" not in st.session_state:
+    st.session_state.section = "Stock Prediction"
 
-section = st.sidebar.radio(
-    "Select Module",
-    ["Stock Prediction", "Portfolio Optimization", "AI Market News", "SIP Planner","AI Chat Assistant"]
-)
+# ==========================================
+# Function to create styled buttons
+# ==========================================
+def sidebar_button(name, display_name):
+    if st.sidebar.button(display_name, key=name):
+        st.session_state.section = name
+
+# ==========================================
+# Sidebar Buttons (same size, attractive)
+# ==========================================
+st.sidebar.write("### Choose your section")
+
+button_style = """
+<style>
+div.stButton > button {
+    width: 220px;
+    height: 50px;
+    margin: 8px 0px;
+    background-color: #2C3E50;
+    color: #ECF0F1;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 15px;
+}
+div.stButton > button:hover {
+    background-color: #34495E;
+}
+</style>
+"""
+st.sidebar.markdown(button_style, unsafe_allow_html=True)
+
+# Sidebar buttons
+if st.sidebar.button("📈 Stock Prediction"):
+    st.session_state.section = "Stock Prediction"
+if st.sidebar.button("💼 Portfolio Optimization"):
+    st.session_state.section = "Portfolio Optimization"
+if st.sidebar.button("📰 AI Market News"):
+    st.session_state.section = "AI Market News"
+if st.sidebar.button("💰 SIP Planner"):
+    st.session_state.section = "SIP Planner"
+if st.sidebar.button("🤖 AI Chat Assistant"):
+    st.session_state.section = "AI Chat Assistant"
+
+# Use the selected section
+section = st.session_state.section
+
+# st.write(f"Current Section: {section}")  # for testing
+
 
 # ======================================================
 # 1️⃣ STOCK PREDICTION MODULE
@@ -240,6 +303,7 @@ if section == "Stock Prediction":
 # 2️⃣ PORTFOLIO OPTIMIZATION MODULE
 # ======================================================
 elif section == "Portfolio Optimization":
+    st.write("You are in Portfolio Optimization Module")
 
     st.header("💼 Portfolio Optimization")
     df = pd.read_csv("stocks.csv")
@@ -354,6 +418,7 @@ elif section == "Portfolio Optimization":
 # 4️⃣ AI MARKET NEWS (ADVANCED VERSION)
 # ======================================================
 elif section == "AI Market News":
+    st.write("You are in AI Market News Module")
 
     st.header("📰 AI Powered Market News & Decision Guide")
 
@@ -474,6 +539,7 @@ High risk currently.
 # 6️⃣ SIP PLANNER
 # ======================================================
 elif section == "SIP Planner":
+    st.write("You are in SIP Planner Module")
 
     st.title("📊 Professional SIP Planner (Real-Time)")
 
@@ -558,6 +624,7 @@ elif section == "SIP Planner":
 # 🤖 FREE AI CHAT ASSISTANT (NO API)
 # ======================================================
 elif section == "AI Chat Assistant":
+    st.write("You are in AI Chat Assistant Module")
 
     st.header("🤖 Smart Investment Assistant (Free AI)")
 
