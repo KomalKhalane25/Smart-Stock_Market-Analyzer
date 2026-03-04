@@ -7,6 +7,8 @@ plotly
 scikit-learn
 tensorflow
 ta
+textblob
+nltk
 python-dotenv
 google-generativeai
 matplotlib
