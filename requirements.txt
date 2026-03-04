@@ -5,6 +5,7 @@ pandas
 numpy
 plotly
 scikit-learn
+openai
 tensorflow
 ta
 textblob
