@@ -17,6 +17,7 @@ from plotly.subplots import make_subplots
 import feedparser
 from textblob import TextBlob
 from openai import OpenAI
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
 # ==========================================

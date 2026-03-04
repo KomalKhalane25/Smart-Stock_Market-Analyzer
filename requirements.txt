@@ -14,3 +14,4 @@ python-dotenv
 google-generativeai
 matplotlib
 feedparser
+vaderSentiment
